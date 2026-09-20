@@ -1,6 +1,6 @@
 
-const CACHE='jubaoshanpen-v4-3df4bb3625a9';
-const FILES=["/jubaoshanpen-demo/","/jubaoshanpen-demo/index.html","/jubaoshanpen-demo/art/atlas-v05.png","/jubaoshanpen-demo/art/battle-scenes-v3.png","/jubaoshanpen-demo/art/hero-v06.png","/jubaoshanpen-demo/art/npc-v05.png","/jubaoshanpen-demo/art/portraits-v3.png","/jubaoshanpen-demo/favicon.svg","/jubaoshanpen-demo/icon-192.png","/jubaoshanpen-demo/icon-512.png","/jubaoshanpen-demo/manifest.webmanifest","/jubaoshanpen-demo/assets/index-DyR0vkdf.js","/jubaoshanpen-demo/assets/index-CQSqjRIW.css"];
+const CACHE='jubaoshanpen-v4-afaa71a7d4ee';
+const FILES=["/jubaoshanpen-demo/","/jubaoshanpen-demo/index.html","/jubaoshanpen-demo/art/atlas-v05.png","/jubaoshanpen-demo/art/battle-scenes-v3.png","/jubaoshanpen-demo/art/hero-v06.png","/jubaoshanpen-demo/art/npc-v05.png","/jubaoshanpen-demo/art/portraits-v3.png","/jubaoshanpen-demo/favicon.svg","/jubaoshanpen-demo/icon-192.png","/jubaoshanpen-demo/icon-512.png","/jubaoshanpen-demo/manifest.webmanifest","/jubaoshanpen-demo/assets/index-CVi5MPjE.js","/jubaoshanpen-demo/assets/index-DUbm4yfE.css"];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const keys=await caches.keys();
  await (await caches.open(CACHE)).addAll(FILES.map(url=>new Request(url,{cache:'reload'})));
