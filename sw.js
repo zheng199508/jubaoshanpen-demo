@@ -1,6 +1,6 @@
 
-const CACHE='jubaoshanpen-v4-fc4d79d67c60';
-const FILES=["/jubaoshanpen-demo/","/jubaoshanpen-demo/index.html","/jubaoshanpen-demo/art/atlas-v05.png","/jubaoshanpen-demo/art/battle-scenes-v3.png","/jubaoshanpen-demo/art/hero-v06.png","/jubaoshanpen-demo/art/npc-v05.png","/jubaoshanpen-demo/art/portraits-v3.png","/jubaoshanpen-demo/favicon.svg","/jubaoshanpen-demo/icon-192.png","/jubaoshanpen-demo/icon-512.png","/jubaoshanpen-demo/manifest.webmanifest","/jubaoshanpen-demo/assets/index-C199BRMw.js","/jubaoshanpen-demo/assets/index-DUbm4yfE.css"];
+const CACHE='jubaoshanpen-v5-7469a6bf0355';
+const FILES=["/jubaoshanpen-demo/","/jubaoshanpen-demo/index.html","/jubaoshanpen-demo/art/v08-sample/characters/haoyun_walk.png","/jubaoshanpen-demo/art/v08-sample/characters/hero_walk.png","/jubaoshanpen-demo/art/v08-sample/characters/kumu_walk.png","/jubaoshanpen-demo/art/v08-sample/characters/outer_officer_walk.png","/jubaoshanpen-demo/art/v08-sample/characters/qingyi_senior_walk.png","/jubaoshanpen-demo/art/v08-sample/icons/teaching_note.png","/jubaoshanpen-demo/art/v08-sample/icons/wang_debt_note.png","/jubaoshanpen-demo/art/v08-sample/portraits/haoyun_portrait.png","/jubaoshanpen-demo/art/v08-sample/portraits/hero_portrait.png","/jubaoshanpen-demo/art/v08-sample/portraits/kumu_portrait.png","/jubaoshanpen-demo/art/v08-sample/portraits/outer_officer_portrait.png","/jubaoshanpen-demo/art/v08-sample/portraits/qingyi_senior_portrait.png","/jubaoshanpen-demo/art/v08-sample/scenes/courtyard_sample.png","/jubaoshanpen-demo/art/v08-sample/scenes/dorm_sample.png","/jubaoshanpen-demo/art/v08-sample/scenes/pond_sample.png","/jubaoshanpen-demo/art/v08-sample/tiles/environment_tiles.png","/jubaoshanpen-demo/favicon.svg","/jubaoshanpen-demo/icon-192.png","/jubaoshanpen-demo/icon-512.png","/jubaoshanpen-demo/manifest.webmanifest","/jubaoshanpen-demo/assets/index-DAaQ4ZPh.js","/jubaoshanpen-demo/assets/index-CgsXY0We.css"];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const keys=await caches.keys();
  await (await caches.open(CACHE)).addAll(FILES.map(url=>new Request(url,{cache:'reload'})));
@@ -20,7 +20,7 @@ self.addEventListener('fetch',event=>{
   const cache=await caches.open(CACHE);
   const cached=await cache.match(event.request,{ignoreSearch:true,ignoreVary:true});
   if(cached)return cached;
-  try{return await fetch(event.request);}catch(error){
+  try{const response=await fetch(event.request);if((u.pathname.includes('/audio/')||u.pathname.includes('/art/'))&&response.ok)event.waitUntil(cache.put(event.request,response.clone()));return response;}catch(error){
    if(event.request.mode==='navigate')return (await cache.match("/jubaoshanpen-demo/index.html"))||Response.error();
    throw error;
   }
