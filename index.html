@@ -1,7 +1,33 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#122e29"><meta name="description" content="聚宝山盆：太虚杂役，像素修仙游戏本地试玩。"><title>聚宝山盆 · 太虚杂役</title><link rel="icon" type="image/svg+xml" href="/jubaoshanpen-demo/favicon.svg"><link rel="manifest" href="/jubaoshanpen-demo/manifest.webmanifest">  <script type="module" crossorigin src="/jubaoshanpen-demo/assets/index-C08nhHlV.js"></script>
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#122e29"><meta name="description" content="聚宝山盆：太虚杂役，像素修仙游戏本地试玩。">
+  <title>聚宝山盆 · 太虚杂役</title><link rel="icon" type="image/svg+xml" href="/jubaoshanpen-demo/favicon.svg"><link rel="manifest" href="/jubaoshanpen-demo/manifest.webmanifest">
+  <style>#rotate-device,#startup-recovery{z-index:10000;color:#f5e7bf;text-align:center;background:radial-gradient(circle at 50% 40%,#2c5949,#0d2922 70%);justify-content:center;align-items:center;padding:28px;font-family:system-ui,sans-serif;position:fixed;inset:0}#rotate-device{display:none}#startup-recovery{display:flex}#startup-recovery[hidden]{display:none}.startup-card{background:#123a30;border:2px solid #d9bf7d;border-radius:12px;max-width:420px;padding:24px;box-shadow:0 18px 70px #0009}.startup-card h2{color:#f0d691;margin:0 0 10px}.startup-card p{color:#d2ddd2;line-height:1.7}.startup-actions{flex-wrap:wrap;justify-content:center;gap:10px;display:flex}.startup-actions button{color:#fff0c8;background:#294f40;border:1px solid #d9bf7d;border-radius:7px;min-height:44px;padding:9px 15px}.startup-actions .primary{color:#17382f;background:#d9bf7d}.rotate-card{max-width:360px}.rotate-icon{border:5px solid #dfc581;border-radius:13px;width:72px;height:112px;margin:0 auto 18px;animation:1.8s ease-in-out infinite rotate-phone;display:block}@keyframes rotate-phone{0%,25%{transform:rotate(0)}65%,to{transform:rotate(90deg)}}@media (orientation:portrait) and (width<=900px){#rotate-device{display:flex}#app{visibility:hidden}}</style>
+  <script type="module" crossorigin src="/jubaoshanpen-demo/assets/index-Brvj-1Gt.js"></script>
   <link rel="stylesheet" crossorigin href="/jubaoshanpen-demo/assets/index-CgsXY0We.css">
 </head>
-<body><div id="app"></div></body>
+<body>
+  <aside id="rotate-device" aria-live="polite"><div class="rotate-card"><span class="rotate-icon" aria-hidden="true"></span><h2>请横屏游玩</h2><p>旋转手机后会自动进入完整画面。添加到桌面可获得更稳定的全屏体验。</p></div></aside>
+  <section id="startup-recovery" hidden role="alert"><div class="startup-card"><h2>加载异常</h2><p id="startup-message">游戏没有正常显示。可以先刷新；仍异常时只清除离线缓存并重新下载，本地存档不会被删除。</p><div class="startup-actions"><button id="startup-refresh">普通刷新</button><button id="startup-reset" class="primary">强制清缓存重下</button></div></div></section>
+  <div id="app"></div>
+  <script>
+    (()=>{
+      const panel=document.querySelector('#startup-recovery'),message=document.querySelector('#startup-message');let timer;
+      const hide=()=>{clearTimeout(timer);panel.hidden=true};
+      const show=text=>{message.textContent=text||'游戏没有正常显示。可以先刷新；仍异常时只清除离线缓存并重新下载，本地存档不会被删除。';panel.hidden=false};
+      window.__showStartupRecovery=show;window.__hideStartupRecovery=hide;window.__markGameReady=stage=>{document.documentElement.dataset.gameReady=stage||'ready';dispatchEvent(new Event('game-ready'))};
+      timer=setTimeout(()=>{if(!document.documentElement.dataset.gameReady)show()},12000);
+      addEventListener('game-ready',hide);
+      addEventListener('error',event=>{show(event.target&&event.target!==window?'核心资源加载失败。请刷新；仍异常时强制清缓存重下，本地存档不会被删除。':'游戏运行异常。请刷新；仍异常时强制清缓存重下，本地存档不会被删除。')},true);
+      addEventListener('unhandledrejection',()=>show('游戏启动过程出现异常。请刷新；仍异常时强制清缓存重下，本地存档不会被删除。'));
+      document.querySelector('#startup-refresh').addEventListener('click',()=>location.reload());
+      document.querySelector('#startup-reset').addEventListener('click',async()=>{
+        message.textContent='正在重置离线缓存……本地存档不会被删除。';
+        try{if('caches'in window)await Promise.all((await caches.keys()).filter(key=>key.startsWith('jubaoshanpen-')).map(key=>caches.delete(key)));if('serviceWorker'in navigator){const gameScope=new URL('./',location.href).href;await Promise.all((await navigator.serviceWorker.getRegistrations()).filter(reg=>reg.scope.startsWith(gameScope)).map(reg=>reg.unregister()))}}finally{const url=new URL(location.href);url.searchParams.set('reload',Date.now().toString());location.replace(url)}
+      });
+    })();
+  </script>
+</body>
 </html>
